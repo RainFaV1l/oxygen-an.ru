@@ -1,17 +1,47 @@
 <!DOCTYPE html>
-<html lang="">
+<html lang="ru" class="h-full">
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
-    <link rel="icon" href="<%= BASE_URL %>favicon.ico">
+    <link rel="icon" href="<%= BASE_URL %>favicon.svg">
     <title><%= htmlWebpackPlugin.options.title %></title>
   </head>
-  <body>
+  <body class="h-full">
     <noscript>
-      <strong>We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
+      <strong>У вас выключен JavaScript. Пожалуйста включите его для корректной работы нашего веб-сайта. Сообщение ошибки: <%= htmlWebpackPlugin.options.title %>.</strong>
     </noscript>
-    <div id="app"></div>
+    <div class="h-full" id="app"></div>
     <!-- built files will be auto injected -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/smoothscroll/1.4.10/SmoothScroll.min.js" integrity="sha256-huW7yWl7tNfP7lGk46XE+Sp0nCotjzYodhVKlwaNeco=" crossorigin="anonymous"></script>
+    <script>
+        SmoothScroll({
+            // Время скролла 400 = 0.8 секунды
+            animationTime    : 1000,
+            // Размер шага в пикселях
+            stepSize         : 75,
+
+            // Дополнительные настройки:
+
+            // Ускорение
+            accelerationDelta : 30,
+            // Максимальное ускорение
+            accelerationMax   : 2,
+
+            // Поддержка клавиатуры
+            keyboardSupport   : true,
+            // Шаг скролла стрелками на клавиатуре в пикселях
+            arrowScroll       : 50,
+
+            // Pulse (less tweakable)
+            // ratio of "tail" to "acceleration"
+            pulseAlgorithm   : true,
+            pulseScale       : 4,
+            pulseNormalize   : 1,
+
+            // Поддержка тачпада
+            touchpadSupport   : true,
+        })
+    </script>
   </body>
 </html>

@@ -1,0 +1,26 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat+Alternates:wght@400;500;700&family=Montserrat:wght@400;500;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+    .container {
+        @apply max-w-screen-2xl mx-auto md:px-5;
+    }
+    .input {
+        @apply border border-dark px-5 py-4 text-dark text-base;
+    }
+    .input::placeholder {
+        @apply text-dark opacity-75 text-base transition;
+    }
+    .input:focus::placeholder {
+        @apply opacity-0;
+    }
+}
+
+:focus {
+    outline-style: none;
+    outline-width: 0 !important;
+    outline-color: transparent !important;
+}
