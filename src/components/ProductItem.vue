@@ -3,8 +3,8 @@
     <div class="absolute top-4 right-4 text-min-sm text-white bg-brown h-12 w-12 rounded-full text-center flex justify-center items-center">
       new
     </div>
-    <div :class="xs ? 'h-80 w-64' : 'h-128 w-96'">
-      <img class="w-full h-full object-cover" :src="this.imageRequire(this.product.imagePath)" alt="item">
+    <div :class="xs ? 'h-80 w-64' : 'h-128 w-full'" class="image-container">
+      <img class="w-full h-full object-cover" :src="this.product.preview_image_path" alt="item" @load="loadedImage({ elClass: '.image-container', })">
     </div>
     <div class="flex flex-col gap-3">
       <div class="flex flex-col gap-2">
@@ -19,6 +19,7 @@
 <script>
 import formattedPrice from "@/mixins/formattedPrice";
 import imageRequire from "@/mixins/imageRequire";
+import {mapActions} from "vuex";
 export default {
   mixins: [
       formattedPrice,
@@ -28,6 +29,9 @@ export default {
     return {
       formattedPrice: 0
     }
+  },
+  methods: {
+    ...mapActions('product', ['loadedImage']),
   },
   props: {
     product: {

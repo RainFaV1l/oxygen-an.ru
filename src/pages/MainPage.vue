@@ -1,25 +1,24 @@
 <template>
-  <div class="flex flex-col gap-24">
-    <div class="container pb-24 flex flex-col items-center justify-center gap-14">
+  <div class="flex flex-col gap-12 sm:gap-24">
+    <div class="container pb-12 sm:pb-24 flex flex-col items-center justify-center gap-7 sm:gap-14">
       <nav>
-        <ul class="flex items-center gap-8 text-sm">
-          <li><a class="p-2" href="#">Все</a></li>
-          <li><a class="p-2" href="#">Тренчи</a></li>
-          <li><a class="p-2" href="#">Пиджаки</a></li>
-          <li><a class="p-2" href="#">Брюки</a></li>
-          <li><a class="p-2" href="#">Платья</a></li>
-          <li><a class="p-2" href="#">Рубашки</a></li>
-          <li><a class="p-2" href="#">Шорты</a></li>
-          <li><a class="p-2" href="#">Юбки</a></li>
-          <li><a class="p-2" href="#">Костюмы</a></li>
-          <li><a class="p-2" href="#">Жилеты</a></li>
+        <ul class="flex flex-wrap items-center justify-center gap-4 sm:gap-8 mt-5 text-sm">
+          <li><button class="p-2" @click="setSelectedCategory(0)">Все</button></li>
+          <li v-for="category in getCategories" :key="category.id"><button @click="setSelectedCategory(category.id)" class="p-2">{{ category.name }}</button></li>
         </ul>
       </nav>
-      <div class="flex w-full justify-start flex-wrap gap-10 px-32 products__list">
-        <div v-for="product in products" :key="product.id" class="products__item">
-          <ProductItem :product="product" @click="$router.push(`/products/${product.id}`)"/>
+      <div v-if="getFilteredProducts.length > 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 px-4 mx-auto w-full gap-10 xl:px-32 products__list">
+          <ProductItem v-for="product in getFilteredProducts" :key="product.id" class="products__item" :product="product" @click="$router.push(`/products/${product.id}`)"/>
           <!--        <router-link :to="{ path: `products/${product.id}`, params: { id: product.id } }"><ProductItem :product="product"/></router-link>-->
-        </div>
+      </div>
+      <div class="text-center py-24 flex flex-col gap-2" v-if="getFilteredProducts.length === 0">
+        <p class="transform rotate-90 text-3xl font-medium">:(</p>
+        <p class="font-medium">Товары не найдены</p>
+      </div>
+      <div class="flex justify-center items-center gap-7">
+        <button v-for="page in getTotalPages" :key="page" :class="{
+          'text-blue-600' : page ===  getPage
+        }">{{ page }}</button>
       </div>
     </div>
   </div>
@@ -27,22 +26,28 @@
 
 <script>
 import ProductItem from "@/components/ProductItem.vue";
-import products from "@/props/products.js";
+// import products from "@/props/products.js";
+import {mapActions, mapGetters} from "vuex";
 export default {
   components: {ProductItem},
   data() {
     return {
-      products,
+
     }
+  },
+  computed: {
+    ...mapGetters('product', ['getProducts', 'getCategories', 'getSelectedCategory', 'getFilteredProducts', 'getTotalPages', 'getPage']),
+  },
+  methods: {
+    ...mapActions('product', ['fetchProducts', 'fetchCategories', 'setSelectedCategory']),
+  },
+  mounted() {
+    this.fetchProducts()
+    this.fetchCategories()
   }
 }
 </script>
 
 <style scoped>
-  .products__item {
-    margin-top: 50px;
-  }
-  .products__item:nth-child(1), .products__item:nth-child(2), .products__item:nth-child(3) {
-    margin-top: 0;
-  }
+
 </style>

@@ -1,5 +1,5 @@
 <template>
-  <div class="fixed bottom-16 right-16 flex flex-col items-end gap-4 ask-question">
+  <div class="fixed bottom-10 right-5 sm:right-16 sm:bottom-16 flex flex-col items-end gap-4 ask-question z-10">
     <div class="flex flex-col gap-2 self-end mr-0.5">
       <div class="flex justify-center items-center">
         <div class="flex flex-col gap-2" v-if="contacts">

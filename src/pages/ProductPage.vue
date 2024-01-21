@@ -1,28 +1,29 @@
 <template>
   <div>
-    <div class="container py-24 px-48 flex flex-col gap-20">
-      <div class="flex flex-wrap gap-10">
+    <div class="container py-5 px-5 xl:px-48 xl:py-24 flex flex-col gap-20">
+      <div class="flex flex-wrap justify-center md:justify-start gap-10">
         <div class="flex flex-col gap-2">
           <div class="relative slider">
-            <div class="h-192 w-140 slide">
-              <img class="h-full w-full object-cover" :src="this.imageRequire(product.sliderImages[activeSlide].slideImagePath)" alt="Изображение">
+            <div class="h-128 w-full md:w-140 sm:h-192 slide image-container">
+              <img class="h-full w-full object-cover lazy" :src="product.images && product.images.length > 0 ? product.images[activeSlide].image_path : 'http://placehold.it/560x768'" alt="Изображение"
+                   @load="loadedImage({ elClass: '.image-container', isFirst: true })">
             </div>
             <PrevButton class="absolute top-1/2 -translate-y-1/2 left-8" @click="prevSlide"/>
             <NextButton class="absolute top-1/2 -translate-y-1/2 right-8" @click="nextSlide"/>
           </div>
           <div class="flex justify-center items-center gap-2 slider-dots">
-            <div v-for="(image, index) in product.sliderImages" :key="image.id">
+            <div v-for="(image, index) in product.images" :key="image.id">
               <div class="h-16 w-16 cursor-pointer slider-dot" @click="showSlide(index)">
                 <div class="slider-dot-opacity"></div>
-                <img class="h-full w-full object-cover" :src="this.imageRequire(image.slideImagePath)" alt="Изображение">
+                <img class="h-full w-full object-cover lazy" :src="image.image_path" alt="Изображение">
               </div>
             </div>
           </div>
         </div>
-        <div class="w-1/3 flex flex-col items-start gap-7 mt-2 text-sm">
+        <div class="w-full md:w-1/3 flex flex-col items-start gap-7 mt-2 text-sm">
           <h1 class="font-bold text-2xl">{{ product.name }}</h1>
           <span class="text-xl">{{ this.formattedPriceValue(this.product.price) }}</span>
-          <div class="flex items-center gap-4" v-if="cartItems.length === 0 || !cartItems.some(item => item.id === this.product.id)">
+          <div class="flex flex-wrap items-center gap-4" v-if="cartItems.length === 0 || !cartItems.some(item => item.id === this.product.id)">
             <div class="flex items-center gap-4 text-lg py-3 px-4 bg-white border border-dark">
               <button class="h-4 w-4 cursor-pointer" @click="decreaseCounter"><MinusIcon/></button>
               <span class="w-8 text-center">{{ counter }}</span>
@@ -39,7 +40,7 @@
           <span v-html="product.description"></span>
           <button class="border-b border-dark" @click="this.$store.commit('product/setIsSizeZoomModal', {
             condition: true,
-            imagePath: this.imageRequire(product.sizePath)
+            imagePath: product.size_image_path,
           })">Таблица размеров</button>
         </div>
       </div>
@@ -47,9 +48,9 @@
         <h3 class="font-bold text-base">Смотрите также</h3>
         <div class="flex flex-col gap-6">
           <div class="flex flex-wrap gap-10">
-            <div v-for="product in products.slice(1, 3)" :key="product.id">
-              <ProductItem :product="product" :xs="true" @click="$router.push(`/products/${product.id}`)"/>
-            </div>
+<!--            <div v-for="product in products.slice(1, 3)" :key="product.id">-->
+<!--              <ProductItem :product="product" :xs="true" @click="$router.push(`/products/${product.id}`)"/>-->
+<!--            </div>-->
           </div>
           <div>
             <div></div>
@@ -62,9 +63,9 @@
 </template>
 
 <script>
-import products from "@/props/products";
+// import products from "@/props/products";
 import { MinusIcon, PlusIcon } from '@heroicons/vue/24/outline'
-import ProductItem from "@/components/ProductItem.vue";
+// import ProductItem from "@/components/ProductItem.vue";
 import formattedPrice from "@/mixins/formattedPrice";
 import imageRequire from "@/mixins/imageRequire";
 import NextButton from "@/components/UI/NextButton.vue";
@@ -73,7 +74,13 @@ import {mapActions, mapGetters} from "vuex";
 
 export default {
 
-  components: {PrevButton, NextButton, ProductItem, MinusIcon, PlusIcon},
+  components: {
+    PrevButton,
+    NextButton,
+    // ProductItem,
+    MinusIcon,
+    PlusIcon
+  },
 
   mixins: [
     formattedPrice,
@@ -81,35 +88,37 @@ export default {
   ],
   data() {
     return {
-      products,
-      product: null,
+      // products: [],
       counter: 1,
       activeSlide: 0,
     }
   },
 
-  created() {
-    this.findProductById(this.$route.params.id)
-  },
+  // created() {
+  //   this.findProductById(this.$route.params.id)
+  // },
 
-  watch: {
-    '$route.params.id': function(newValue) {
-      this.findProductById(newValue)
-    }
-  },
+  // watch: {
+  //   '$route.params.id': function(newValue) {
+  //     this.findProductById(newValue)
+  //   }
+  // },
 
   computed: {
     ...mapGetters('cart', ['cartItems']),
+    // ...mapGetters('product', ['getProducts']),
+    ...mapGetters('product', ['product']),
   },
 
   methods: {
 
     ...mapActions('cart', ['addToCart', 'setCartModalOpen']),
+    ...mapActions('product', ['fetchProduct', 'loadedImage']),
 
-    findProductById(value) {
-      const productId = value;
-      this.product = this.products.find(product => product.id == productId);
-    },
+    // findProductById(value) {
+    //   const productId = value;
+    //   this.product = this.products.find(product => product.id == productId);
+    // },
 
     decreaseCounter() {
       if(this.counter > 1) this.counter--
@@ -121,7 +130,7 @@ export default {
 
     nextSlide() {
 
-      if(this.activeSlide === this.product.sliderImages.length - 1) {
+      if(this.activeSlide === this.product.images.length - 1) {
 
         setTimeout(() => {
           this.activeSlide = 0
@@ -144,7 +153,7 @@ export default {
       if(this.activeSlide === 0) {
 
         setTimeout(() => {
-          this.activeSlide = this.product.sliderImages.length - 1
+          this.activeSlide = this.product.images.length - 1
         },150)
 
       } else {
@@ -202,33 +211,65 @@ export default {
       })
 
     },
+
+  //   lazyLoadImages() {
+  //     const lazyImages = document.querySelectorAll('.lazy');
+  //     const lazyImageObserver = new IntersectionObserver((entries) => {
+  //       entries.forEach((entry) => {
+  //         if (entry.isIntersecting) {
+  //           const lazyImage = entry.target;
+  //           lazyImage.src = lazyImage.dataset.src;
+  //           lazyImage.classList.remove('lazy');
+  //           lazyImageObserver.unobserve(lazyImage);
+  //         }
+  //       });
+  //     });
+  //     lazyImages.forEach((lazyImage) => {
+  //       lazyImageObserver.observe(lazyImage);
+  //     });
+  //   }
+
   },
 
   mounted() {
-    this.slideDotAnimation('.slider-dot')
+    // this.slideDotAnimation('.slider-dot')
+    // this.lazyLoadImages();
+    this.fetchProduct(this.$route.params.id)
   }
 
 }
 </script>
 
 <style scoped>
+
   .slider-dot {
     position: relative;
   }
+
   .slider-dot .slider-dot-opacity {
     transition: .3s ease-in-out;
   }
+
   .slider-dot:not(.active):hover .slider-dot-opacity {
     width: 100%;
     height: 100%;
     position: absolute;
     background-color: rgba(255, 255, 255, 0.3);
   }
+
   .slide img {
     transition: .15s ease-in-out;
     opacity: 1;
   }
+
   .slide.load img {
     opacity: 0;
   }
+
+  /* Стили для задержанной загрузки изображения */
+  /*.lazy {
+    opacity: 0;
+    transition: opacity 0.5s;
+  }*/
+
 </style>

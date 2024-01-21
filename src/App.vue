@@ -1,5 +1,6 @@
 <template>
   <div class="wrapper min-h-full flex flex-col bg-bg font-montserrat text-dark">
+    <PreloaderComponent/>
     <ModalMenu v-if="isModalMenuOpen" @closeModalMenu="toggleModal" :mobileMenuModalEls="mobileMenuModalEls"/>
     <SearchModal v-if="isSearchModalOpen" @closeSearchModalMenu="toggleSearchModal"/>
     <SizeZoomModal v-if="$store.state.product.isSizeZoomModalOpen"/>
@@ -23,12 +24,14 @@ import AskQuestion from "@/components/UI/AskQuestion.vue";
 import SizeZoomModal from "@/components/Modals/SizeZoomModal.vue";
 import CartModal from "@/components/Modals/CartModal.vue";
 import {mapGetters} from "vuex";
+import PreloaderComponent from "@/components/UI/PreloaderComponent.vue";
 
 export default {
 
   name: 'App',
 
   components: {
+    PreloaderComponent,
     CartModal,
     SizeZoomModal,
     AskQuestion,
@@ -210,5 +213,13 @@ export default {
     opacity: 1;
   }
 
+  .image-container img {
+    transition: opacity .3s ease-in-out;
+    opacity: 0;
+  }
+
+  .image-container.loaded img {
+    opacity: 1;
+  }
 
 </style>

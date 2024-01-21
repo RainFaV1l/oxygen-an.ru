@@ -1,7 +1,7 @@
 <template>
   <div class="absolute search-modal h-full w-full z-10" @click="closeSearchModal">
     <div class="search-modal__content fixed top-0 left-0 w-full flex flex-col justify-center items-center p-12 bg-yellow z-20 gap-7">
-      <div class="flex items-center w-1/3 gap-7">
+      <div class="flex justify-center sm:justify-start items-center w-full xl:w-1/2 2xl:w-1/3 gap-7">
         <div class="relative w-full h-full">
           <div class="absolute top-1/2 left-6 -translate-y-1/2">
             <MagnifyingGlassIcon class="h-6 w-6 text-dark stroke-1 cursor-pointer rotate-90"/>
@@ -15,7 +15,7 @@
           <XMarkIcon class="h-9 w-9 text-dark stroke-1"></XMarkIcon>
         </div>
       </div>
-      <ul class="flex gap-4 justify-start w-1/3">
+      <ul class="flex flex-wrap sm:justify-start gap-4 justify-center w-1/3">
         <li class="text-sm border border-dark border-opacity-25 px-3 py-2 rounded-full cursor-pointer">тренч</li>
         <li class="text-sm border border-dark border-opacity-25 px-3 py-2 rounded-full cursor-pointer">платье</li>
         <li class="text-sm border border-dark border-opacity-25 px-3 py-2 rounded-full cursor-pointer">пиджак</li>

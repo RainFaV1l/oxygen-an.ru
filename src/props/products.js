@@ -14,6 +14,7 @@ export default [
         imagePath: 'images/catalog/1.png',
         sizePath: 'images/product/size.png',
         color: 'Синий',
+        category: 1,
         sliderImages: [
             {
                 id: 1,
@@ -55,6 +56,7 @@ export default [
         imagePath: 'images/catalog/2.png',
         sizePath: 'images/product/size.png',
         color: 'Серый',
+        category: 1,
         sliderImages: [
             {
                 id: 1,
@@ -84,6 +86,7 @@ export default [
         imagePath: 'images/catalog/3.png',
         sizePath: 'images/product/size.png',
         color: 'Синий',
+        category: 2,
         sliderImages: [
             {
                 id: 1,
@@ -119,6 +122,7 @@ export default [
         imagePath: 'images/catalog/4.png',
         sizePath: 'images/product/size.png',
         color: 'Черный',
+        category: 3,
         sliderImages: [
             {
                 id: 1,
@@ -154,6 +158,7 @@ export default [
         imagePath: 'images/catalog/5.png',
         sizePath: 'images/product/size.png',
         color: 'Белый',
+        category: 4,
         sliderImages: [
             {
                 id: 1,

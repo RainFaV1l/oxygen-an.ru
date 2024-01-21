@@ -1,9 +1,9 @@
 <template>
-  <div class="fixed left-0 top-0 w-full h-full z-10 bg-black bg-opacity-60 size-zoom-modal cursor-pointer flex justify-center items-center" @click="closeModal">
+  <div class="fixed left-0 top-0 w-full h-full z-20 bg-black bg-opacity-60 size-zoom-modal cursor-pointer flex justify-center items-center" @click="closeModal">
     <div class="absolute top-5 right-10 z-20 size-zoom-modal__close">
       <XMarkIcon class="cursor-pointer h-10 w-10 text-white stroke-1"></XMarkIcon>
     </div>
-    <div class="z-20 w-1/2 size-zoom-modal__content cursor-default">
+    <div class="z-20 w-full md:w-2/3 lg:w-1/2 size-zoom-modal__content cursor-default">
       <div class="flex flex-col items-center justify-center">
         <div class="h-full w-full">
           <img class="w-full h-full object-contain" :src="$store.state.product.sizeImagePath" alt="Изображение размеров">

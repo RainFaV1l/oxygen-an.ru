@@ -1,6 +1,6 @@
 <template>
   <footer>
-    <div class="container py-24 flex flex-col gap-12">
+    <div class="container py-12 sm:py-24 flex flex-col gap-12">
       <div class="flex flex-wrap justify-between gap-8">
         <MenuEl :menuEls="menuEls"/>
       </div>
@@ -15,15 +15,15 @@
                 <img class="w-full h-full object-contain" :src="visa" alt="Visa logo">
               </div>
             </div>
-            <span>© 2021 KIRAS | Все права защищены</span>
-            <span>Разработка сайта: ra</span>
+            <span class="text-sm sm:text-base">© 2021 KIRAS | Все права защищены</span>
+            <span class="text-sm sm:text-base">Разработка сайта: ra</span>
           </div>
-          <div class="flex flex-col gap-7">
-            <h3 class="font-bold">Узнавайте о новостях первыми</h3>
+          <div class="flex flex-col gap-7 md:w-full 2xl:w-auto">
+            <h3 class="font-bold text-sm sm:text-base">Узнавайте о новостях первыми</h3>
             <div class="flex flex-col gap-4">
               <div class="flex flex-col justify-end gap-5 toggle-input">
                 <div class="h-4 toggle-input__placeholder">
-                  <span class="text-gray-400 font-medium" v-if="inputFocused && email.length === 0">example@example.com</span>
+                  <span class="text-gray-400 font-medium text-sm sm:text-lg" v-if="inputFocused && email.length === 0">example@example.com</span>
                 </div>
                 <div class="flex flex-col gap-2 w-full">
                   <input v-model="email" class="bg-transparent px-7 font-medium" @focus="toggle" @blur="toggle"  type="text">
@@ -33,7 +33,7 @@
               <span class="text-sm">Подписываясь на рассылку, вы соглашаетесь с условиями политики конфиденциальности </span>
             </div>
           </div>
-          <div class="w-1/4">
+          <div class="w-full md:w-1/4">
             <button class="w-full h-full border-2 border-dark py-6 font-medium">Подписаться</button>
           </div>
         </div>

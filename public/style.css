@@ -6,7 +6,7 @@
 
 @layer components {
     .container {
-        @apply max-w-screen-2xl mx-auto md:px-5;
+        @apply max-w-screen-2xl mx-auto px-5;
     }
     .input {
         @apply border border-dark px-5 py-4 text-dark text-base;
