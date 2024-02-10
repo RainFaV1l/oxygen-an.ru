@@ -1,12 +1,13 @@
 <template>
   <div class="wrapper min-h-full flex flex-col bg-bg font-montserrat text-dark">
     <PreloaderComponent/>
-    <ModalMenu v-if="isModalMenuOpen" @closeModalMenu="toggleModal" :mobileMenuModalEls="mobileMenuModalEls"/>
+    <ModalMenu v-if="getIsModalMenuOpen" :mobileMenuModalEls="mobileMenuModalEls"/>
     <SearchModal v-if="isSearchModalOpen" @closeSearchModalMenu="toggleSearchModal"/>
     <SizeZoomModal v-if="$store.state.product.isSizeZoomModalOpen"/>
+    <LoginModal v-if="loginModalOpen"/>
     <AskQuestion/>
     <CartModal v-if="cartModalOpen"/>
-    <HeaderComponent @toggleMenu="toggleModal" @toggleSearch="toggleSearchModal"/>
+    <HeaderComponent @toggleSearch="toggleSearchModal"/>
     <main class="flex-auto">
       <router-view></router-view>
     </main>
@@ -22,8 +23,9 @@ import mobileMenuModalEls from "@/props/FooterComponent/MobileMenuModalEls";
 import SearchModal from "@/components/Modals/SearchModal.vue";
 import AskQuestion from "@/components/UI/AskQuestion.vue";
 import SizeZoomModal from "@/components/Modals/SizeZoomModal.vue";
+import LoginModal from "@/components/Modals/LoginModal.vue";
 import CartModal from "@/components/Modals/CartModal.vue";
-import {mapGetters} from "vuex";
+import {mapGetters, mapMutations} from "vuex";
 import PreloaderComponent from "@/components/UI/PreloaderComponent.vue";
 
 export default {
@@ -39,6 +41,7 @@ export default {
     ModalMenu,
     FooterComponent,
     HeaderComponent,
+    LoginModal,
   },
 
   data() {
@@ -55,13 +58,18 @@ export default {
 
   computed: {
     ...mapGetters('cart', ['cartModalOpen']),
+    ...mapGetters('auth', ['loginModalOpen', 'getIsModalMenuOpen']),
   },
 
   methods: {
 
+    ...mapMutations('auth', ['setIsModalMenuOpen']),
+
     toggleModal() {
 
-      if(!this.isModalMenuOpen) {
+      if(!this.getIsModalMenuOpen) {
+
+        console.log('1')
 
         this.changeModalData()
 
@@ -88,7 +96,9 @@ export default {
 
       const hintEl = document.querySelector('.ask-question')
 
-      if(this.isModalMenuOpen) {
+      if(this.getIsModalMenuOpen) {
+
+        console.log('3')
 
         document.body.style.paddingRight = ''
 
@@ -107,7 +117,7 @@ export default {
 
       }
 
-      this.isModalMenuOpen = !this.isModalMenuOpen;
+      this.setIsModalMenuOpen(!this.getIsModalMenuOpen)
 
       document.body.classList.toggle("overflow-hidden")
 

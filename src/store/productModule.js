@@ -7,12 +7,14 @@ export const productModule = {
             isSizeZoomModalOpen: false,
             sizeImagePath: '',
             products: [],
+            popularProducts: [],
             product: {},
             categories: [],
             setLoading: false,
             selectedCategory: 0,
             page: 1,
             totalPages: 0,
+            searchQuery: '',
         }
     },
 
@@ -20,6 +22,10 @@ export const productModule = {
 
         getProducts: state => {
             return state.products;
+        },
+
+        getPopularProducts: state => {
+            return state.popularProducts;
         },
 
         getLoading: state => {
@@ -46,17 +52,59 @@ export const productModule = {
             return state.selectedCategory;
         },
 
+        getSearchQuery: state => {
+            return state.searchQuery;
+        },
+
         getFilteredProducts: state => {
-            if (state.selectedCategory === 0) {
-                return state.products; // Все элементы отображаются, если выбрана категория "all"
-            } else {
-                return state.products.filter(item => item.category_id === state.selectedCategory);
+
+            if(state.searchQuery.length > 0 && state.selectedCategory === 0) {
+
+                return state.products.filter(product =>
+
+                    product.name.toLowerCase().includes(state.searchQuery.toLowerCase())
+
+                );
+
             }
+
+            if(state.searchQuery.length > 0 && state.selectedCategory !== 0) {
+
+                return state.products.filter(product =>
+
+                    product.name.toLowerCase().includes(state.searchQuery.toLowerCase()) && product.category_id === state.selectedCategory
+
+                );
+
+            }
+
+            if(state.searchQuery.length === 0 && state.selectedCategory !== 0) {
+
+                return state.products.filter(product =>
+
+                    product.category_id === state.selectedCategory
+
+                );
+
+            }
+
+            else {
+
+                return state.products
+
+            }
+
         },
 
     },
 
     mutations: {
+
+        setSearchQuery(state, query) {
+
+            state.searchQuery = query
+
+        },
 
         setIsSizeZoomModal(state, objectValue) {
 
@@ -127,12 +175,24 @@ export const productModule = {
             state.products = products
         },
 
+        addProducts(state, products) {
+            state.products = [...state.products, ...products]
+        },
+
+        setPopularProducts(state, popularProducts) {
+            state.popularProducts = popularProducts
+        },
+
         setCategories(state, categories) {
             state.categories = categories
         },
 
         setProduct(state, product) {
             state.product = product
+        },
+
+        setPage(state, page) {
+            state.page = page
         },
 
         setLoading(state, bool) {
@@ -162,19 +222,69 @@ export const productModule = {
 
     actions: {
 
-        async fetchProducts({state, commit}) {
+        async fetchProducts({
+            //state, 
+            commit}) {
 
             try {
 
                 const response = await axios.get('http://127.0.0.1:8000/api/v1/products', {
+                    // params: {
+                    //     page: state.page,
+                    // }
+                })
+
+                // commit('setTotalPages', Math.ceil(response.data.meta.total / response.data.meta.per_page))
+
+                // commit('setProducts', response.data.data)
+
+                commit('setProducts', response.data)
+
+            } catch (exception) {
+
+                console.log('Возникла ошибка: ' + exception)
+
+            } finally {
+
+                // commit('setLoading', false)
+
+            }
+        },
+
+        async fetchPopularProducts({commit}, id) {
+
+            try {
+
+                const response = await axios.get(`http://127.0.0.1:8000/api/v1/products/${id}/see/also`, {})
+
+                commit('setPopularProducts', response.data)
+
+            } catch (exception) {
+
+                console.log('Возникла ошибка: ' + exception)
+
+            } finally {
+
+                // commit('setLoading', false)
+
+            }
+        },
+
+        async loadMoreProducts({state, commit}) {
+
+            try {
+
+                state.page += 1
+
+                const response = await axios.get('http://127.0.0.1:8000/api/v1/products', {
                     params: {
-                        _page: state.page,
+                        page: state.page,
                     }
                 })
 
                 commit('setTotalPages', Math.ceil(response.data.meta.total / response.data.meta.per_page))
 
-                commit('setProducts', response.data.data)
+                commit('addProducts', response.data.data)
 
             } catch (exception) {
 
@@ -235,6 +345,14 @@ export const productModule = {
 
         setSelectedCategory(context, item) {
             context.commit('setSelectedCategory', item);
+        },
+
+        setPage(context, item) {
+            context.commit('setPage', item);
+        },
+
+        setSearchQuery(context, item) {
+            context.commit('setSearchQuery', item);
         },
 
     },

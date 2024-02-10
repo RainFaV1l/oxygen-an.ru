@@ -9,44 +9,63 @@
           <div v-if="clearSearch" @click="clearSearchForm" class="absolute top-1/2 right-6 -translate-y-1/2 bg-white rounded-full p-2 h-7 w-7 flex justify-center items-center cursor-pointer">
             <XMarkIcon class="text-dark stroke-1"></XMarkIcon>
           </div>
-          <input v-model="searchInput" @input="showClearSearchButton" type="text" class="placeholder-dark placeholder-opacity-40 bg-transparent border border-dark border-opacity-25 py-4 px-16 appearance-none w-full text-base font-medium" placeholder="Искать">
+          <input v-model="searchQuery" @input="showClearSearchButton" type="text" class="placeholder-dark placeholder-opacity-40 bg-transparent border border-dark border-opacity-25 py-4 px-16 appearance-none w-full text-base font-medium" placeholder="Искать">
         </div>
         <div class="h-9 w-9 close-icon cursor-pointer">
           <XMarkIcon class="h-9 w-9 text-dark stroke-1"></XMarkIcon>
         </div>
       </div>
-      <ul class="flex flex-wrap sm:justify-start gap-4 justify-center w-1/3">
+      <!-- <ul class="flex flex-wrap sm:justify-start gap-4 justify-center w-1/3">
         <li class="text-sm border border-dark border-opacity-25 px-3 py-2 rounded-full cursor-pointer">тренч</li>
         <li class="text-sm border border-dark border-opacity-25 px-3 py-2 rounded-full cursor-pointer">платье</li>
         <li class="text-sm border border-dark border-opacity-25 px-3 py-2 rounded-full cursor-pointer">пиджак</li>
-      </ul>
+      </ul> -->
     </div>
   </div>
 </template>
 
 <script>
 import {MagnifyingGlassIcon, XMarkIcon} from "@heroicons/vue/24/outline";
+import {mapGetters, mapActions} from "vuex";
 
 export default {
   components: {MagnifyingGlassIcon, XMarkIcon},
   data() {
     return {
       clearSearch: false,
-      searchInput: '',
+      searchQuery: '',
     }
   },
+  computed: {
+    ...mapGetters('product', ['getFilteredProducts', 'getSearchQuery']),
+  },
+  watch: {
+    searchQuery(newQuery) {
+      this.setSearchQuery(newQuery)
+      if(newQuery !== '') {
+        this.clearSearch = true
+      } else {
+        this.clearSearch = false
+      }
+    }
+  },
+  mounted() {
+    this.searchQuery = this.getSearchQuery
+  },
   methods: {
+    ...mapActions('product', ['setSearchQuery']),
     closeSearchModal(event) {
       if (event.target.classList.contains('search-modal') || event.target.closest('.close-icon')) {
         this.$emit('closeSearchModalMenu');
       }
     },
     clearSearchForm() {
-      this.searchInput = ''
+      this.searchQuery = ''
+      this.setSearchQuery('')
       this.clearSearch = false
     },
     showClearSearchButton() {
-      if(this.searchInput !== '') {
+      if(this.getSearchQuery !== '') {
         this.clearSearch = true
         return
       }

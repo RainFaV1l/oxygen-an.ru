@@ -1,37 +1,78 @@
 <template>
-  <div class="cart-modal modal fixed w-full h-full z-10 bg-black bg-opacity-60 flex justify-center items-center" @click="closeModal">
-    <div class="cart-modal__content modal__content bg-white z-20">
-      <div class="absolute top-2 right-2 p-5 z-25">
-        <XMarkIcon class="cursor-pointer h-9 w-9 text-dark md:text-white stroke-1 close-icon"></XMarkIcon>
+  <div class="cart-modal modal fixed w-full h-full z-40 bg-black bg-opacity-60 flex justify-center items-center" @click="closeModal">
+    <TopErrorMessages v-if="getErrors.errors">
+      <div class="w-96" v-for="(error, index) in getErrors.errors" :key="index">
+        <ErrorMessage :error="error[0]"/>
       </div>
-      <div class="flex flex-col items-center gap-12">
-        <div class="flex flex-col items-center gap-4">
-          <h1 class="text-3xl font-medium">Авторизации</h1>
-          <p class="text-base font-medium">Аккаунт позволяет просматривать историю заказов</p>
+    </TopErrorMessages>
+    <TopErrorMessages v-if="getErrors.error">
+      <div class="w-96">
+        <ErrorMessage :error="getErrors.error"/>
+      </div>
+    </TopErrorMessages>
+    <div class="cart-modal__content modal__content bg-bg z-50 rounded">
+      <div class="absolute top-2 right-2 p-5 z-50 hidden sm:flex">
+        <XMarkIcon class="cursor-pointer h-9 w-9 text-white stroke-1 close-icon"></XMarkIcon>
+      </div>
+      <div class="relative flex flex-col gap-8 px-8 py-12 sm:gap-12 sm:py-24 sm:px-8 cart-form">
+        <div class="absolute top-0 right-0 p-5 z-50 flex sm:hidden">
+          <XMarkIcon class="cursor-pointer h-9 w-9 text-dark stroke-1 close-icon"></XMarkIcon>
         </div>
-        <form class="flex flex-col gap-7 w-96">
-          <input class="input" type="text" placeholder="Email">
-          <input class="input" type="password" placeholder="Пароль">
-          <button class="button">Войти</button>
-        </form>
+        <div class="flex flex-col items-center gap-12">
+          <div class="flex flex-col items-center gap-4">
+            <h1 class="text-xl sm:text-3xl font-medium">Авторизации</h1>
+            <p class="text-sm sm:text-base font-medium text-center">Аккаунт позволяет просматривать историю заказов</p>
+          </div>
+          <form class="flex flex-col gap-7 w-full sm:w-96">
+            <input v-model="email" class="input font-medium w-full text-sm sm:text-base" type="text" placeholder="Email">
+            <input v-model="password" class="input font-medium w-full text-sm sm:text-base" type="password" placeholder="Пароль">
+            <button class="button" @click.prevent="login({
+              'email': this.email,
+              'password': this.password,
+            })">Войти</button>
+          </form>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+
 import {XMarkIcon} from "@heroicons/vue/24/outline";
+import {mapActions, mapGetters, mapMutations} from "vuex";
+import ErrorMessage from "@/components/UI/Login/ErrorMessage.vue";
+import TopErrorMessages from "@/components/UI/Login/TopErrorMessages.vue";
 
 export default {
-  components: {XMarkIcon},
+  components: {TopErrorMessages, ErrorMessage, XMarkIcon},
+  data() {
+    return {
+      email: '',
+      password: '',
+    }
+  },
+  computed: {
+    ...mapGetters('auth', ['getErrors']),
+  },
   methods: {
+    ...mapActions('auth', ['login', 'setLoginModalOpen']),
+    ...mapMutations('auth', ['setError']),
+
     closeModal(event) {
-      if (event.target.classList.contains('size-zoom-modal') || event.target.closest('.size-zoom-modal__close')) {
-        this.$store.commit('product/setIsSizeZoomModal', {
+
+      if (event.target.classList.contains('cart-modal') || event.target.closest('.close-icon')) {
+
+        this.setError({})
+
+        this.setLoginModalOpen({
           condition: false,
         })
+
       }
+
     }
+
   }
 
 }

@@ -17,6 +17,12 @@
     .input:focus::placeholder {
         @apply opacity-0;
     }
+    .button {
+        @apply border border-dark bg-white py-4 px-7 transition font-medium;
+    }
+    .button:hover {
+        @apply bg-transparent;
+    }
 }
 
 :focus {
