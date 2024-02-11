@@ -4,7 +4,15 @@
       <div class="absolute top-2 right-2 p-5 z-25">
         <XMarkIcon class="cursor-pointer h-9 w-9 text-dark md:text-white stroke-1 close-icon"></XMarkIcon>
       </div>
-      <form class="flex flex-col gap-8 px-5 py-8 sm:gap-12 sm:px-9 sm:py-12  h-screen cart-form overflow-auto">
+      <form @submit.prevent="checkout({
+        total: calcTotalPrice,
+        full_name: full_name,
+        telephone: tel === '+7 ' ? '' : tel,
+        email: email,
+        height: height,
+        city: city,
+        promotional_code: promotional_code,
+      })" class="flex flex-col gap-8 px-5 py-8 sm:gap-12 sm:px-9 sm:py-12  h-screen cart-form overflow-auto">
         <div class="flex flex-col gap-12">
           <h2 class="text-2xl font-bold">Ваш заказ:</h2>
           <div v-if="cartItems.length > 0" class="flex flex-col gap-7 border-t border-t-dark border-b border-b-dark border-opacity-25">
@@ -20,9 +28,12 @@
                 <span contenteditable="true" class="text-base w-5 text-center">{{ counterItems[index].count }}</span>
                 <button @click.prevent="increaseObject(index, counterItems[index].count < 10, 'cartItems')" class="border opacity-40 border-dark rounded-full w-5 h-5 p-1 cursor-pointer"><PlusIcon/></button>
               </div>
-              <span class="text-base justify-center w-3/5 sm:w-auto">{{ formattedPriceValue(item.price * counterItems[index].count) }}</span>
+              <span class="text-base text-center justify-center w-12 sm:w-24">{{ formattedPriceValue(item.price * counterItems[index].count) }}</span>
               <div class="flex items-center justify-end gap-7">
-                <div class="border opacity-40 border-dark rounded-full w-6 h-6 cursor-pointer p-1" @click="removeFromCart(index)">
+                <div class="border opacity-40 border-dark rounded-full w-6 h-6 cursor-pointer p-1" @click="removeFromCart({
+                  index: index,
+                  id: item.id
+                })">
                   <XMarkIcon></XMarkIcon>
                 </div>
               </div>
@@ -32,20 +43,28 @@
           <p v-if="cartItems.length === 0" class="text-base font-bold">Корзина пуста. Добавьте в корзину хотя бы один товар</p>
         </div>
         <div class="flex flex-col gap-7">
-          <input class="input" type="text" name="full_name" placeholder="Получатель (ФИО полностью)">
-          <input class="input tel" type="text" v-model="tel" name="tel" @input="telMask" @blur="this.clearTel">
+          <InputError :condition="getErrors.full_name && getErrors.full_name[0]" :message="getErrors.full_name ? getErrors.full_name[0] : ''">
+            <input class="input w-full" type="text" v-model="full_name" name="full_name" placeholder="Получатель (ФИО полностью)">
+          </InputError>
+          <InputError :condition="getErrors.telephone && getErrors.telephone[0]" :message="getErrors.telephone ? getErrors.telephone[0] : ''">
+            <input class="input tel w-full" type="text" v-model="tel" name="tel" @input="telMask" @blur="this.clearTel">
+          </InputError>
           <div class="flex flex-col gap-4">
             <div class="flex flex-col gap-2">
               <span>Ваш E-mail</span>
               <p class="text-sm">Проверьте введенный вами адрес почты, туда поступит письмо с деталями заказа.</p>
             </div>
-            <input class="input" type="email" name="email" placeholder="example@example.com">
+            <InputError :condition="getErrors.email && getErrors.email[0]" :message="getErrors.email ? getErrors.email[0] : ''">
+              <input class="input w-full" v-model="email" type="email" name="email" placeholder="example@example.com">
+            </InputError>
           </div>
           <div class="flex flex-col gap-2">
             <div class="flex flex-col gap-2">
               <span>Какой у вас рост?</span>
             </div>
-            <input class="input" type="number" name="height" placeholder="175 см">
+            <InputError :condition="getErrors.height && getErrors.height[0]" :message="getErrors.height ? getErrors.height[0] : ''">
+              <input class="input w-full" v-model="height" type="text" name="height" placeholder="175 см">
+            </InputError>
           </div>
         </div>
         <div class="flex flex-col gap-7">
@@ -56,20 +75,24 @@
             <div class="flex flex-col gap-2">
               <span>Город</span>
             </div>
-            <input class="input" type="text" name="search" placeholder="Укажите город">
+            <InputError :condition="getErrors.city && getErrors.city[0]" :message="getErrors.city ? getErrors.city[0] : ''">
+              <input class="input w-full" v-model="city" type="text" name="search" placeholder="Укажите город">
+            </InputError>
           </div>
           <div class="flex items-center gap-2 cursor-pointer" @click="toggleCheckbox">
             <input v-model="this.checkbox" class="w-5 h-5 outline-none border-2 border-dark" type="checkbox" name="policy">
             <p class="text-sm">Я согласен (-сна) с <span>политикой конфиденциальности</span></p>
           </div>
           <div class="flex flex-col gap-2">
-            <input class="input" type="text" name="promotional" placeholder="Введите промокод">
+            <InputError :condition="getErrors.promotional_code && getErrors.promotional_code[0]" :message="getErrors.promotional_code ? getErrors.promotional_code[0] : ''">
+              <input class="input w-full" v-model="promotional_code" type="text" name="promotional" placeholder="Введите промокод">
+            </InputError>
           </div>
           <div class="flex flex-col gap-2 self-end text-base font-bold">
             <h4>Итоговая сумма: {{ formattedPriceValue(calcTotalPrice) }}</h4>
           </div>
           <div class="flex flex-col gap-2">
-            <button class="py-4 text-base bg-red-500 text-white transition hover:bg-red-600">Оформить заказ</button>
+            <button :disabled="!this.checkbox" type="submit" class="py-4 text-base bg-red-500 text-white transition hover:bg-red-600 disabled:bg-gray-400">Оформить заказ</button>
           </div>
         </div>
       </form>
@@ -85,28 +108,34 @@ import {mapActions, mapGetters} from "vuex";
 import formattedPrice from "@/mixins/formattedPrice";
 import imageRequire from "@/mixins/imageRequire";
 import {reactive} from 'vue';
+import InputError from "@/components/UI/Cart/InputError.vue";
 
 export default {
-  components: {PlusIcon, MinusIcon, XMarkIcon},
+  components: {InputError, PlusIcon, MinusIcon, XMarkIcon},
   mixins: [telMask, counter, formattedPrice, imageRequire],
   data() {
     return {
+      full_name: '',
       tel: '+7 ',
+      email: '',
+      height: '',
+      city: '',
+      promotional_code: '',
       checkbox: false,
       counter:  reactive([])
     }
   },
   computed: {
-    ...mapGetters('cart', ['cartItems']),
+    ...mapGetters('cart', ['cartItems', 'getErrors']),
     counterItems() {
       return this.cartItems.map(item => { return { count: item.count };  });
     },
     calcTotalPrice() {
-      return this.cartItems.reduce((previous, present) => previous + present.price * present.count, 0)
+      return this.cartItems?.length > 0 ? this.cartItems.reduce((previous, present) => previous + present.price * present.count, 0) : 0
     },
   },
   methods: {
-    ...mapActions('cart', ['removeFromCart', 'setCartModalOpen']),
+    ...mapActions('cart', ['removeFromCart', 'setCartModalOpen', 'checkout']),
     clearTel() {
       if(this.tel === '+') {
         this.tel = '+7 '

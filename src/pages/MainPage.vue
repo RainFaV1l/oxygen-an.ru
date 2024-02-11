@@ -15,11 +15,12 @@
         <p class="transform rotate-90 text-3xl font-medium">:(</p>
         <p class="font-medium">Товары не найдены</p>
       </div>
-      <div class="flex justify-center items-center gap-7">
-        <button v-for="page in getTotalPages" :key="page" :class="{
-          'text-blue-600' : page ===  getPage
-        }">{{ page }}</button>
-      </div>
+<!--      <div ref="observer" class="observer w-full h-2"></div>-->
+<!--      <div class="flex justify-center items-center gap-7">-->
+<!--        <button @click="changePage(page)" v-for="page in getTotalPages" :key="page" :class="{-->
+<!--          'text-blue-600' : page ===  getPage-->
+<!--        }">{{ page }}</button>-->
+<!--      </div>-->
     </div>
   </div>
 </template>
@@ -39,11 +40,51 @@ export default {
     ...mapGetters('product', ['getProducts', 'getCategories', 'getSelectedCategory', 'getFilteredProducts', 'getTotalPages', 'getPage']),
   },
   methods: {
-    ...mapActions('product', ['fetchProducts', 'fetchCategories', 'setSelectedCategory']),
+    ...mapActions('product', ['fetchProducts', 'fetchCategories', 'setSelectedCategory', 'setPage', 'loadMoreProducts']),
+    // changePage(page) {
+    //   this.fetchProducts()
+    //   this.setPage(page)
+    // }
+    observer() {
+
+      const options = {
+        rootMargin: '0px',
+        threshold: 1.0
+      }
+
+      // entries, observer
+
+      const callback = (entries) => {
+
+        if(entries[0].isIntersecting && this.getPage < this.getTotalPages) {
+
+          console.log('toop')
+
+          this.loadMoreProducts()
+
+        }
+
+      }
+
+      const observer = new IntersectionObserver(callback, options)
+
+      observer.observe(this.$refs.observer)
+
+    }
   },
+  // beforeRouteUpdate(to, from, next) {
+  //     // Сюда поместите логику для обновления данных при возврате на главную страницу
+  //     // Например, вызовите метод, загружающий данные по новой
+  //     this.fetchProducts(); // Предполагается, что у вас есть метод для загрузки данных
+  //     next();
+  //   },
   mounted() {
     this.fetchProducts()
     this.fetchCategories()
+    // this.observer()
+  },
+  watch: {
+
   }
 }
 </script>

@@ -15,15 +15,19 @@
                 <img class="w-full h-full object-contain" :src="visa" alt="Visa logo">
               </div>
             </div>
-            <span class="text-sm sm:text-base">© 2021 KIRAS | Все права защищены</span>
-            <span class="text-sm sm:text-base">Разработка сайта: ra</span>
+            <span class="text-sm sm:text-base">© 2024 Oxygen | Все права защищены</span>
+            <span class="text-sm sm:text-base">Разработка сайта: <span class="font-medium">N|A</span></span>
           </div>
           <div class="flex flex-col gap-7 md:w-full 2xl:w-auto">
             <h3 class="font-bold text-sm sm:text-base">Узнавайте о новостях первыми</h3>
             <div class="flex flex-col gap-4">
               <div class="flex flex-col justify-end gap-5 toggle-input">
                 <div class="h-4 toggle-input__placeholder">
-                  <span class="text-gray-400 font-medium text-sm sm:text-lg" v-if="inputFocused && email.length === 0">example@example.com</span>
+                  <span class="text-green-500" v-if="this.message">{{ this.message }}</span>
+                  <span class="text-gray-400 font-medium text-sm sm:text-lg"
+                        :class="getSubscribeErrors.email ? 'text-red-500' : ''"
+                        v-else-if="inputFocused && email.length === 0 || getSubscribeErrors.email">
+                    {{ getSubscribeErrors.email ? getSubscribeErrors.email[0] : 'example@example.com' }}</span>
                 </div>
                 <div class="flex flex-col gap-2 w-full">
                   <input v-model="email" class="bg-transparent px-7 font-medium" @focus="toggle" @blur="toggle"  type="text">
@@ -34,7 +38,7 @@
             </div>
           </div>
           <div class="w-full md:w-1/4">
-            <button class="w-full h-full border-2 border-dark py-6 font-medium">Подписаться</button>
+            <button @click="subscribeAndShowMessage" class="w-full h-full border-2 border-dark py-6 font-medium">Подписаться</button>
           </div>
         </div>
       </div>
@@ -47,6 +51,7 @@ import MenuEl from "@/components/Footer/MenuEl.vue";
 import menuEls from "@/props/FooterComponent/MenuEls";
 import mastercard from "@/assets/images/footer/mastercard.png";
 import visa from "@/assets/images/footer/visa.png";
+import {mapActions, mapGetters} from "vuex";
 export default {
   components: {MenuEl},
   data() {
@@ -56,9 +61,11 @@ export default {
       visa,
       inputFocused: true,
       email: '',
+      message: '',
     }
   },
   methods: {
+    ...mapActions('profile', ['subscribe']),
     toggle() {
       if(!this.inputFocused) {
         this.inputFocused = !this.inputFocused
@@ -75,8 +82,16 @@ export default {
     startToggleAnimation() {
       const toggleElement = document.querySelector('.toggle-input')
       toggleElement.classList.toggle('toggle-input_active')
+    },
+    async subscribeAndShowMessage() {
+      let data = await this.subscribe({email: this.email})
+      this.message = data ? data.data.msg : ''
+      this.email = ''
     }
   },
+  computed: {
+    ...mapGetters('profile', ['getSubscribeErrors'])
+  }
 }
 </script>
 
@@ -88,7 +103,7 @@ export default {
     transform-origin: top left;
   }
   .toggle-input.toggle-input_active .toggle-input__placeholder {
-    //opacity: 0;
+    opacity: 0;
     transform: scale(0);
   }
 </style>
