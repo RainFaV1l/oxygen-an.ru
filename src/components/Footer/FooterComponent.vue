@@ -1,25 +1,24 @@
 <template>
   <footer>
     <div class="container py-12 sm:py-24 flex flex-col gap-12">
-      <div class="flex flex-wrap justify-between gap-8">
+      <div class="flex flex-wrap justify-between gap-4">
         <MenuEl :menuEls="menuEls"/>
       </div>
       <div>
-        <div class="flex flex-wrap justify-between items-center gap-4">
-          <div class="flex flex-col gap-7">
-            <div class="flex items-center gap-4">
-              <div class="h-12">
-                <img class="w-full h-full object-contain" :src="mastercard" alt="MasterCard logo">
-              </div>
-              <div class="h-12">
-                <img class="w-full h-full object-contain" :src="visa" alt="Visa logo">
-              </div>
-            </div>
-            <span class="text-sm sm:text-base">© 2024 Oxygen | Все права защищены</span>
-            <span class="text-sm sm:text-base">Разработка сайта: <span class="font-medium">N|A</span></span>
+        <div class="flex flex-wrap-reverse justify-between items-center gap-4">
+          <div class="flex flex-col gap-7 w-full text-center">
+<!--            <div class="flex items-center gap-4">-->
+<!--              <div class="h-12">-->
+<!--                <img class="w-full h-full object-contain" :src="mastercard" alt="MasterCard logo">-->
+<!--              </div>-->
+<!--              <div class="h-12">-->
+<!--                <img class="w-full h-full object-contain" :src="visa" alt="Visa logo">-->
+<!--              </div>-->
+<!--            </div>-->
+            <span class="text-sm sm:text-base mt-6">© 2024 Oxygen | Все права защищены</span>
           </div>
           <div class="flex flex-col gap-7 md:w-full 2xl:w-auto">
-            <h3 class="font-bold text-sm sm:text-base">Узнавайте о новостях первыми</h3>
+<!--            <h3 class="font-bold text-sm sm:text-base">Узнавайте о новостях первыми</h3>-->
             <div class="flex flex-col gap-4">
               <div class="flex flex-col justify-end gap-5 toggle-input">
                 <div class="h-4 toggle-input__placeholder">
@@ -27,10 +26,10 @@
                   <span class="text-gray-400 font-medium text-sm sm:text-lg"
                         :class="getSubscribeErrors.email ? 'text-red-500' : ''"
                         v-else-if="inputFocused && email.length === 0 || getSubscribeErrors.email">
-                    {{ getSubscribeErrors.email ? getSubscribeErrors.email[0] : 'example@example.com' }}</span>
+                    {{ getSubscribeErrors.email ? getSubscribeErrors.email[0] : '' }}</span>
                 </div>
                 <div class="flex flex-col gap-2 w-full">
-                  <input v-model="email" class="bg-transparent px-7 font-medium" @focus="toggle" @blur="toggle"  type="text">
+                  <input v-model="email" class="transition-all duration-300 bg-transparent font-medium placeholder:text-[#C9C9C9FF] focus:placeholder:text-transparent" @focus="toggle" @blur="toggle" placeholder="example@example.com" type="text">
                   <div style="height: 3px" class="w-full bg-brown"></div>
                 </div>
               </div>
@@ -38,7 +37,7 @@
             </div>
           </div>
           <div class="w-full md:w-1/4">
-            <button @click="subscribeAndShowMessage" class="w-full h-full border-2 border-dark py-6 font-medium">Подписаться</button>
+            <button @click="subscribeAndShowMessage" class="w-full h-full border-2 border-dark py-4 sm:py-6 text-sm sm:text-lg font-medium">Подписаться</button>
           </div>
         </div>
       </div>

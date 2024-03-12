@@ -8,7 +8,7 @@
         <div class="h-full w-full">
           <img class="w-full h-full object-contain" :src="$store.state.product.sizeImagePath" alt="Изображение размеров">
         </div>
-        <div class="h-full w-full flex justify-center items-center py-14 px-20 bg-white">
+        <div class="h-full w-full flex justify-center items-center py-14 px-20 bg-white text-center">
           <span class="text-sm">*все размеры указаны в сантиметрах</span>
         </div>
       </div>

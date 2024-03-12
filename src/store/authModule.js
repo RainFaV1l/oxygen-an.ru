@@ -7,9 +7,9 @@ export const authModule = {
         return {
             loginModalOpen: false,
             errors: {},
-            backendApiDomain: 'http://backend.u2484741.isp.regruhosting.ru/api/v1/',
-            backendUrl: 'http://backend.u2484741.isp.regruhosting.ru/api/v1/auth/',
-            backendGetUserUrl: 'http://backend.u2484741.isp.regruhosting.ru/api/v1/auth/user',
+            backendApiDomain: 'https://backend.oxygen-an.ru/api/v1/',
+            backendUrl: 'https://backend.oxygen-an.ru/api/v1/auth/',
+            backendGetUserUrl: 'https://backend.oxygen-an.ru/api/v1/auth/user',
             token: JSON.parse(localStorage.getItem('token')) || '',
             isModalMenuOpen: false,
             isAuth: false,
@@ -251,6 +251,42 @@ export const authModule = {
                 if(exception.response) {
 
                     context.state.errors = exception.response.data
+
+                    setTimeout(() => {
+
+                        const smoothErrors = document.querySelectorAll('.smooth-error')
+
+                        smoothErrors.forEach((error, index) => {
+
+                            if(index > 0) {
+
+                                setTimeout(() => {
+
+                                    error.classList.add('show')
+
+                                    setTimeout(() => {
+
+                                        error.classList.remove('show')
+
+                                    }, 1500)
+
+                                }, 1500)
+
+                            } else {
+
+                                error.classList.add('show')
+
+                                setTimeout(() => {
+
+                                    error.classList.remove('show')
+
+                                }, 1500)
+
+                            }
+
+                        })
+
+                    }, 50)
 
                 }
 

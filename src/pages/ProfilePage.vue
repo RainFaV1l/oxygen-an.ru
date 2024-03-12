@@ -1,7 +1,17 @@
 <template>
   <div>
     <div class="container py-24">
-      <h1 class="text-3xl border-b border-dark pb-5 font-medium">Мои заказы</h1>
+      <div class="flex items-center justify-between border-b border-dark pb-5">
+        <h1 class="text-3xl font-medium">Мои заказы</h1>
+        <button @click="logout" class="flex items-center gap-1 font-medium">
+          <div class="w-12 h-12">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor" class="w-full h-full">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 9V5.25A2.25 2.25 0 0 1 10.5 3h6a2.25 2.25 0 0 1 2.25 2.25v13.5A2.25 2.25 0 0 1 16.5 21h-6a2.25 2.25 0 0 1-2.25-2.25V15m-3 0-3-3m0 0 3-3m-3 3H15" />
+            </svg>
+          </div>
+          <span>Выйти</span>
+        </button>
+      </div>
       <div class="flex flex-col gap-7 mt-8">
         <div v-for="order in getOrders" :key="order.id" class="border border-dark border-opacity-25 rounded">
           <div class="flex flex-wrap items-center justify-between gap-7 bg-white p-10 rounded">
@@ -28,18 +38,18 @@
               </div>
             </div>
             <div class="lg:ml-4 h-full w-full lg:w-1/2 flex flex-col justify-center flex-wrap gap-4 text-sm">
-              <div class="flex flex-wrap items-center gap-7 border-r">
-                <p class="flex flex-wrap items-center gap-3 border-r border-dark pr-7 border-opacity-25">Дата оформления: <span class="font-medium">{{ formatDate(order.created_at) }}</span></p>
-                <p class="flex flex-wrap items-center gap-3 border-r border-dark pr-7 border-opacity-25">Оплата: <span class="font-medium">{{ this.formattedPriceValue(order.total) }} за {{ order.products.length + ' ' + this.formatterCount(order.products.length, 'товар') }}</span></p>
+              <div class="flex flex-wrap items-center gap-7">
+                <p class="flex flex-wrap items-center gap-3 border-r border-dark pr-7 border-opacity-0 md:border-opacity-25">Дата оформления: <span class="font-medium">{{ formatDate(order.created_at) }}</span></p>
+                <p class="flex flex-wrap items-center gap-3 border-r border-dark pr-7 border-opacity-0 md:border-opacity-25">Оплата: <span class="font-medium">{{ this.formattedPriceValue(order.total) }} за {{ order.products.length + ' ' + this.formatterCount(order.products.length, 'товар') }}</span></p>
               </div>
               <div class="flex flex-wrap items-center gap-7">
-                <p class="flex flex-wrap items-center gap-3 border-r border-dark pr-7 border-opacity-25">Город: <span class="font-medium">{{ order.city }}</span></p>
-                <p class="flex flex-wrap items-center gap-3 border-r border-dark pr-7 border-opacity-25">Телефон: <span class="font-medium">{{ order.tel }}</span></p>
-                <p class="flex flex-wrap items-center gap-3 border-r border-dark pr-7 border-opacity-25">Email: <span class="font-medium">{{ order.email }}</span></p>
+                <p class="flex flex-wrap items-center gap-3 border-r border-dark pr-7 border-opacity-0 md:border-opacity-25">Город: <span class="font-medium">{{ order.city }}</span></p>
+                <p class="flex flex-wrap items-center gap-3 border-r border-dark pr-7 border-opacity-0 md:border-opacity-25">Телефон: <span class="font-medium">{{ order.tel }}</span></p>
+                <p class="flex flex-wrap items-center gap-3 border-r border-dark pr-7 border-opacity-0 md:border-opacity-25">Email: <span class="font-medium">{{ order.email }}</span></p>
               </div>
               <div class="flex flex-wrap items-center gap-7">
-                <p class="flex flex-wrap items-center gap-3 border-r border-dark pr-7 border-opacity-25">ФИО: <span class="font-medium">{{ order.fio }}</span></p>
-                <p class="flex flex-wrap items-center gap-3 border-r border-dark pr-7 border-opacity-25">Рост: <span class="font-medium">{{ order.height}}</span></p>
+                <p class="flex flex-wrap items-center gap-3 border-r border-dark pr-7 border-opacity-0 md:border-opacity-25">ФИО: <span class="font-medium">{{ order.fio }}</span></p>
+                <p class="flex flex-wrap items-center gap-3 border-r border-dark pr-7 border-opacity-0 md:border-opacity-25">Рост: <span class="font-medium">{{ order.height}}</span></p>
               </div>
             </div>
           </div>
@@ -62,7 +72,7 @@ export default {
     formatterCount,
   ],
   methods: {
-    ...mapActions('auth', ['isAuthCheck']),
+    ...mapActions('auth', ['isAuthCheck', "logout"]),
     ...mapActions('cart', ['cancelling']),
     ...mapActions('profile', ['orders']),
     ...mapGetters('auth', ['getIsAuth']),

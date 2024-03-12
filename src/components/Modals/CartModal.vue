@@ -1,7 +1,7 @@
 <template>
   <div class="cart-modal modal fixed w-full h-full z-10 bg-black bg-opacity-60 flex justify-center items-center" @click="closeModal">
     <div class="cart-modal__content modal__content bg-white z-20">
-      <div class="absolute top-2 right-2 p-5 z-25">
+      <div class="absolute top-2 right-2 p-5 z-30 hidden md:block">
         <XMarkIcon class="cursor-pointer h-9 w-9 text-dark md:text-white stroke-1 close-icon"></XMarkIcon>
       </div>
       <form @submit.prevent="checkout({
@@ -12,18 +12,21 @@
         height: height,
         city: city,
         promotional_code: promotional_code,
-      })" class="flex flex-col gap-8 px-5 py-8 sm:gap-12 sm:px-9 sm:py-12  h-screen cart-form overflow-auto">
+      })" class="relative flex flex-col gap-8 px-5 py-8 sm:gap-12 sm:px-9 sm:py-12 h-screen cart-form overflow-auto mt-6 sm:mt-0">
+        <div class="absolute top-2 right-2 p-5 z-30">
+          <XMarkIcon class="cursor-pointer h-9 w-9 text-dark md:text-white stroke-1 close-icon"></XMarkIcon>
+        </div>
         <div class="flex flex-col gap-12">
           <h2 class="text-2xl font-bold">Ваш заказ:</h2>
           <div v-if="cartItems.length > 0" class="flex flex-col gap-7 border-t border-t-dark border-b border-b-dark border-opacity-25">
             <div v-for="(item, index) in cartItems" :key="index" class="flex flex-wrap justify-between items-center gap-6 sm:gap-4 py-4">
-              <div class="flex justify-start items-center gap-6 w-2/5 sm:w-2/5">
+              <div class="flex sm:flex-nowrap justify-start items-center gap-6 w-full sm:w-2/5">
                 <div class="w-16 h-16">
                   <img class="w-full h-full object-cover" :src="item.preview_image_path" alt="Изображение товара">
                 </div>
                 <span class="text-base font-bold">{{ item.name }}</span>
               </div>
-              <div class="flex gap-3 items-center justify-center w-2/5 sm:w-1/5">
+              <div class="flex gap-3 items-center justify-start sm:justify-center w-2/5 sm:w-1/5">
                 <button @click.prevent="decreaseObject(index, counterItems[index].count !== 1, 'cartItems')" class="border opacity-40 border-dark rounded-full w-5 h-5 p-1 cursor-pointer"><MinusIcon/></button>
                 <span contenteditable="true" class="text-base w-5 text-center">{{ counterItems[index].count }}</span>
                 <button @click.prevent="increaseObject(index, counterItems[index].count < 10, 'cartItems')" class="border opacity-40 border-dark rounded-full w-5 h-5 p-1 cursor-pointer"><PlusIcon/></button>

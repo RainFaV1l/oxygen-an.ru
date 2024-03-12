@@ -1,12 +1,12 @@
 <template>
   <div class="flex flex-col gap-12 sm:gap-24">
     <div class="container pb-12 sm:pb-24 flex flex-col items-center justify-center gap-7 sm:gap-14">
-      <nav>
-        <ul class="flex flex-wrap items-center justify-center gap-4 sm:gap-8 mt-5 text-sm">
-          <li><button class="p-2" @click="setSelectedCategory(0)">Все</button></li>
-          <li v-for="category in getCategories" :key="category.id"><button @click="setSelectedCategory(category.id)" class="p-2">{{ category.name }}</button></li>
-        </ul>
-      </nav>
+<!--      <nav>-->
+<!--        <ul class="flex flex-wrap items-center justify-center gap-4 sm:gap-8 mt-5 text-sm">-->
+<!--          <li><button class="p-2" @click="setSelectedCategory(0)">Все</button></li>-->
+<!--          <li v-for="category in getCategories" :key="category.id"><button @click="setSelectedCategory(category.id)" class="p-2">{{ category.name }}</button></li>-->
+<!--        </ul>-->
+<!--      </nav>-->
       <div v-if="getFilteredProducts.length > 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 px-4 mx-auto w-full gap-10 xl:px-32 products__list">
           <ProductItem v-for="product in getFilteredProducts" :key="product.id" class="products__item" :product="product" @click="$router.push(`/products/${product.id}`)"/>
           <!--        <router-link :to="{ path: `products/${product.id}`, params: { id: product.id } }"><ProductItem :product="product"/></router-link>-->

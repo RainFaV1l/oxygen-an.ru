@@ -228,7 +228,7 @@ export const productModule = {
 
             try {
 
-                const response = await axios.get('http://backend.u2484741.isp.regruhosting.ru/api/v1/products', {
+                const response = await axios.get('https://backend.oxygen-an.ru/api/v1/products', {
                     // params: {
                     //     page: state.page,
                     // }
@@ -255,7 +255,7 @@ export const productModule = {
 
             try {
 
-                const response = await axios.get(`http://backend.u2484741.isp.regruhosting.ru/api/v1/products/${id}/see/also`, {})
+                const response = await axios.get(`https://backend.oxygen-an.ru/api/v1/products/${id}/see/also`, {})
 
                 commit('setPopularProducts', response.data)
 
@@ -276,7 +276,7 @@ export const productModule = {
 
                 state.page += 1
 
-                const response = await axios.get('http://backend.u2484741.isp.regruhosting.ru/api/v1/products', {
+                const response = await axios.get('https://backend.oxygen-an.ru/api/v1/products', {
                     params: {
                         page: state.page,
                     }
@@ -301,7 +301,7 @@ export const productModule = {
 
             try {
 
-                const response = await axios.get('http://backend.u2484741.isp.regruhosting.ru/api/v1/categories', {})
+                const response = await axios.get('https://backend.oxygen-an.ru/api/v1/categories', {})
 
                 commit('setCategories', response.data)
 
@@ -318,7 +318,7 @@ export const productModule = {
 
                 context.commit('setLoading', true)
 
-                const response = await axios.get(`http://backend.u2484741.isp.regruhosting.ru/api/v1/products/${id}`, {})
+                const response = await axios.get(`https://backend.oxygen-an.ru/api/v1/products/${id}`, {})
 
                 // commit('setTotalProducts', Math.ceil(response.headers['x-total-count'] / state.limit))
 

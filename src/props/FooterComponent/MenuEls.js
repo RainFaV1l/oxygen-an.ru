@@ -1,25 +1,20 @@
 export default [
-    {
-        'id': 1,
-        'title': 'Магазин',
-        'content': [
-            {
-                id: 1,
-                name: 'Главная',
-                link: '#'
-            },
-            {
-                id: 2,
-                name: 'Каталог',
-                link: '#'
-            },
-            {
-                id: 3,
-                name: 'Блог бренда',
-                link: '#'
-            },
-        ]
-    },
+    // {
+    //     'id': 1,
+    //     'title': 'Магазин',
+    //     'content': [
+    //         {
+    //             id: 1,
+    //             name: 'Главная',
+    //             link: '/'
+    //         },
+    //         {
+    //             id: 2,
+    //             name: 'Каталог',
+    //             link: '/'
+    //         },
+    //     ]
+    // },
     {
         'id': 2,
         'title': 'Покупателям',
@@ -27,31 +22,31 @@ export default [
             {
                 id: 1,
                 name: 'Оплата',
-                link: '#'
+                link: '/assets/files/payment.pdf'
             },
             {
                 id: 2,
                 name: 'Доставка',
-                link: '#'
+                link: '/assets/files/delivery.pdf'
             },
         ]
     },
-    {
-        'id': 3,
-        'title': 'Соц. сети',
-        'content': [
-            {
-                id: 1,
-                name: 'Tik tok',
-                link: '#'
-            },
-            {
-                id: 2,
-                name: 'Pinterest',
-                link: '#'
-            },
-        ]
-    },
+    // {
+    //     'id': 3,
+    //     'title': 'Соц. сети',
+    //     'content': [
+    //         {
+    //             id: 1,
+    //             name: 'Tik tok',
+    //             link: '#'
+    //         },
+    //         {
+    //             id: 2,
+    //             name: 'Pinterest',
+    //             link: '#'
+    //         },
+    //     ]
+    // },
     {
         'id': 4,
         'title': 'Контакты',
@@ -59,22 +54,12 @@ export default [
             {
                 id: 1,
                 name: '+7 (912)821-35-99',
-                link: '#'
+                link: 'tel:+79128213599'
             },
             {
                 id: 2,
-                name: 'Написать в What App',
-                link: '#'
-            },
-            {
-                id: 3,
-                name: 'Написать в Telegram',
-                link: '#'
-            },
-            {
-                id: 4,
-                name: 'info@kiras-brand.ru',
-                link: '#'
+                name: 'store@oxygen-an.ru',
+                link: 'mailto:store@oxygen-an.ru'
             },
         ]
     },
@@ -84,18 +69,13 @@ export default [
         'content': [
             {
                 id: 1,
-                name: 'Политика конфиденциальности',
-                link: '#'
+                name: 'Политика',
+                link: '/assets/files/privacy-policy.pdf'
             },
             {
                 id: 2,
                 name: 'Оферта',
-                link: '#'
-            },
-            {
-                id: 3,
-                name: 'Условия возврата',
-                link: '#'
+                link: '/assets/files/offer.pdf'
             },
         ]
     },

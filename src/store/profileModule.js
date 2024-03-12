@@ -5,8 +5,8 @@ export const profileModule = {
     state: () => {
         return {
             orders: [],
-            url: 'http://backend.u2484741.isp.regruhosting.ru/api/v1/orders',
-            subscribeUrl: 'http://backend.u2484741.isp.regruhosting.ru/api/v1/subscribe',
+            url: 'https://backend.oxygen-an.ru/api/v1/orders',
+            subscribeUrl: 'https://backend.oxygen-an.ru/api/v1/subscribe',
             subscribeErrors: {},
         }
     },

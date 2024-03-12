@@ -13,12 +13,7 @@
             <button v-if="!mobileMenuModalEl.route">{{ mobileMenuModalEl.title }}</button>
           </li>
         </ul>
-        <button :style="{ 'hidden' : isAuth }" v-if="!isAuth" @click="setLoginModalOpen({ condition: true })" class="button px-14 mt-4">Войти</button>
       </nav>
-      <div class="flex flex-wrap gap-7 p-5 sm:p-8">
-        <button class="button" @click="$router.push('/profile')" v-if="isAuth">Профиль</button>
-        <button class="button bg-transparent hover:bg-white hover:text-dark" @click="this.logout()" v-if="isAuth">Выйти из аккаунта</button>
-      </div>
     </div>
   </div>
 </template>
@@ -28,6 +23,13 @@
 </script>
 
 <script>
+
+// <div class="flex flex-wrap gap-7 p-5 sm:p-8" v-if="isAuth">
+//   <button class="button" @click="$router.push('/profile')" >Профиль</button>
+//   <button class="button bg-transparent hover:bg-white hover:text-dark" @click="logout()">Выйти из аккаунта</button>
+// </div>
+// <button :style="{ 'hidden' : isAuth }" v-if="!isAuth" @click="setLoginModalOpen({ condition: true })" class="button px-14 mt-4">Войти</button>
+
 import {mapActions, mapGetters, mapMutations} from "vuex";
 // import axios from "axios";
 
@@ -51,29 +53,18 @@ export default {
         this.setIsModalMenuOpen(false)
       }
     },
-
-    // async isAuthCheck() {
-    //
-    //   const response = await axios.post(this.getBackendGetUserUrl)
-    //
-    //   if(response.data.id) {
-    //
-    //     this.isAuth = true
-    //
-    //   }
-    //
-    // }
   },
   computed: {
-    ...mapGetters('product', ['getCategories', 'getSelectedCategory', 'getFilteredProducts',]),
+    ...mapGetters('product', ['getCategories', 'getSelectedCategory', 'getFilteredProducts']),
+    ...mapGetters('auth', ['getIsAuth']),
   },
   mounted() {
 
     this.fetchCategories()
 
-    // const token = localStorage.getItem('token')
+    const token = localStorage.getItem('token')
 
-    // token ? this.isAuthCheck() : ''
+    token ? this.isAuthCheck() : ''
 
   },
 }

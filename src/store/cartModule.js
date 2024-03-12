@@ -87,13 +87,19 @@ export const cartModule = {
 
             data = data.map(item => ({ product_id: item.id, count: item.count }))
 
-            return await axios.patch(`http://backend.u2484741.isp.regruhosting.ru/api/v1/cart/update`, {
-                products: data
-            }, {
-                headers: {
-                    'Authorization': `Bearer ${token}`
-                }
-            })
+            const isAuth = localStorage.getItem('token')
+
+            if(isAuth) {
+
+                return await axios.patch(`https://backend.oxygen-an.ru/api/v1/cart/update`, {
+                    products: data
+                }, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                })
+
+            }
 
         },
 

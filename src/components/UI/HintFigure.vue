@@ -1,5 +1,5 @@
 <template>
-  <div class="flex items-center">
+  <div class="items-center hidden sm:flex">
     <div :class="{ 'text-xs': hint.xs }" class="py-3 px-4 bg-dark text-white text-sm font-bold rounded">{{ hint.name }}</div>
     <div class="
         border-l-14 border-r-14 border-b-16

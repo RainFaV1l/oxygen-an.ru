@@ -232,4 +232,8 @@ export default {
     opacity: 1;
   }
 
+  .body-overflow-auto {
+    overflow: auto !important;
+  }
+
 </style>

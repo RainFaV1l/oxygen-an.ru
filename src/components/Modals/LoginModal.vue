@@ -1,24 +1,24 @@
 <template>
-  <div class="cart-modal modal fixed w-full h-full z-40 bg-black bg-opacity-60 flex justify-center items-center" @click="closeModal">
+  <div class="cart-modal modal fixed w-full h-full z-30 bg-black bg-opacity-60 flex justify-center items-center" @click="closeModal">
     <TopErrorMessages v-if="getErrors.errors">
-      <div class="w-96" v-for="(error, index) in getErrors.errors" :key="index">
+      <div class="w-96 smooth-error transition" v-for="(error, index) in getErrors.errors" :key="index">
         <ErrorMessage :error="error[0]"/>
       </div>
     </TopErrorMessages>
     <TopErrorMessages v-if="getErrors.error">
-      <div class="w-96">
+      <div class="w-96 smooth-error transition">
         <ErrorMessage :error="getErrors.error"/>
       </div>
     </TopErrorMessages>
-    <div class="cart-modal__content modal__content bg-bg z-50 rounded">
-      <div class="absolute top-2 right-2 p-5 z-50 hidden sm:flex">
+    <div class="cart-modal__content modal__content h-full sm:h-auto bg-bg z-40 rounded">
+      <div class="absolute top-2 right-2 p-5 z-40 hidden sm:flex">
         <XMarkIcon class="cursor-pointer h-9 w-9 text-white stroke-1 close-icon"></XMarkIcon>
       </div>
-      <div class="relative flex flex-col gap-8 px-8 py-12 sm:gap-12 sm:py-24 sm:px-8 cart-form">
-        <div class="absolute top-0 right-0 p-5 z-50 flex sm:hidden">
+      <div class="relative flex flex-col justify-center gap-8 px-8 py-12 sm:gap-12 sm:py-24 sm:px-8 cart-form h-full">
+        <div class="absolute top-0 right-0 p-5 z-40 flex sm:hidden">
           <XMarkIcon class="cursor-pointer h-9 w-9 text-dark stroke-1 close-icon"></XMarkIcon>
         </div>
-        <div class="flex flex-col items-center gap-12">
+        <div class="flex flex-col justify-center items-center gap-12">
           <div class="flex flex-col items-center gap-4">
             <h1 class="text-xl sm:text-3xl font-medium">Авторизации</h1>
             <p class="text-sm sm:text-base font-medium text-center">Аккаунт позволяет просматривать историю заказов</p>
@@ -79,7 +79,22 @@ export default {
 </script>
 
 <style scoped>
-  /* Стили скроллбара для Chrome, Safari и Opera */
+
+  .smooth-error {
+    position: absolute;
+    z-index: -1;
+    opacity: 0;
+    transform: translateY(-50px);
+  }
+
+  .smooth-error.show {
+    position: relative;
+    z-index: 50;
+    opacity: 1;
+    transform: translateY(0px);
+  }
+
+    /* Стили скроллбара для Chrome, Safari и Opera */
   .cart-form::-webkit-scrollbar {
     width: 5px;  /* Ширина скроллбара */
   }
