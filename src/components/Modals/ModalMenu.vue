@@ -6,11 +6,17 @@
       </div>
       <nav class="p-5 sm:p-8 flex items-start flex-col gap-4">
         <ul class="flex flex-col gap-4 text-sm">
-          <li><button @click="setSelectedCategory(0)">Вся одежда</button></li>
-          <li v-for="category in getCategories" :key="category.id"><button @click="setSelectedCategory(category.id)">{{ category.name }}</button></li>
+          <li>
+            <button @click="setSelectedCategory(0)">Вся одежда</button>
+          </li>
+          <li v-for="category in getCategories" :key="category.id">
+            <button @click="setSelectedCategory(category.id)">{{ category.name }}</button>
+          </li>
           <li v-for="(mobileMenuModalEl, index) in mobileMenuModalEls" :key="index">
-            <button @click="$router.push(mobileMenuModalEl.route)" v-if="mobileMenuModalEl.route">{{ mobileMenuModalEl.title }}</button>
-            <button v-if="!mobileMenuModalEl.route">{{ mobileMenuModalEl.title }}</button>
+            <button @click="$router.push(mobileMenuModalEl.route)" v-if="mobileMenuModalEl.route">
+              {{ mobileMenuModalEl.title }}
+            </button>
+            <a v-if="mobileMenuModalEl.link" :href="mobileMenuModalEl.link">{{ mobileMenuModalEl.title }}</a>
           </li>
         </ul>
       </nav>
@@ -19,7 +25,7 @@
 </template>
 
 <script setup>
-  import { XMarkIcon } from '@heroicons/vue/24/outline'
+import {XMarkIcon} from '@heroicons/vue/24/outline'
 </script>
 
 <script>
@@ -49,7 +55,7 @@ export default {
     ...mapMutations('auth', ['setIsModalMenuOpen']),
     ...mapActions('product', ['fetchCategories', 'setSelectedCategory']),
     closeModal(event) {
-      if(event.target.classList.contains('modal-menu') || event.target.closest('.close-icon')) {
+      if (event.target.classList.contains('modal-menu') || event.target.closest('.close-icon')) {
         this.setIsModalMenuOpen(false)
       }
     },

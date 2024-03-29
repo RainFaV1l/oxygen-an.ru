@@ -13,7 +13,7 @@
         city: city,
         promotional_code: promotional_code,
       })" class="relative flex flex-col gap-8 px-5 py-8 sm:gap-12 sm:px-9 sm:py-12 h-screen cart-form overflow-auto mt-6 sm:mt-0">
-        <div class="absolute top-2 right-2 p-5 z-30">
+        <div class="absolute top-2 right-2 py-5 px-0 sm:p-5 z-30">
           <XMarkIcon class="cursor-pointer h-9 w-9 text-dark md:text-white stroke-1 close-icon"></XMarkIcon>
         </div>
         <div class="flex flex-col gap-12">
@@ -28,7 +28,7 @@
               </div>
               <div class="flex gap-3 items-center justify-start sm:justify-center w-2/5 sm:w-1/5">
                 <button @click.prevent="decreaseObject(index, counterItems[index].count !== 1, 'cartItems')" class="border opacity-40 border-dark rounded-full w-5 h-5 p-1 cursor-pointer"><MinusIcon/></button>
-                <span contenteditable="true" class="text-base w-5 text-center">{{ counterItems[index].count }}</span>
+                <span contenteditable="false" class="text-base w-5 text-center">{{ counterItems[index].count }}</span>
                 <button @click.prevent="increaseObject(index, counterItems[index].count < 10, 'cartItems')" class="border opacity-40 border-dark rounded-full w-5 h-5 p-1 cursor-pointer"><PlusIcon/></button>
               </div>
               <span class="text-base text-center justify-center w-12 sm:w-24">{{ formattedPriceValue(item.price * counterItems[index].count) }}</span>
@@ -86,11 +86,11 @@
             <input v-model="this.checkbox" class="w-5 h-5 outline-none border-2 border-dark" type="checkbox" name="policy">
             <p class="text-sm">Я согласен (-сна) с <span>политикой конфиденциальности</span></p>
           </div>
-          <div class="flex flex-col gap-2">
-            <InputError :condition="getErrors.promotional_code && getErrors.promotional_code[0]" :message="getErrors.promotional_code ? getErrors.promotional_code[0] : ''">
-              <input class="input w-full" v-model="promotional_code" type="text" name="promotional" placeholder="Введите промокод">
-            </InputError>
-          </div>
+<!--          <div class="flex flex-col gap-2">-->
+<!--            <InputError :condition="getErrors.promotional_code && getErrors.promotional_code[0]" :message="getErrors.promotional_code ? getErrors.promotional_code[0] : ''">-->
+<!--              <input class="input w-full" v-model="promotional_code" type="text" name="promotional" placeholder="Введите промокод">-->
+<!--            </InputError>-->
+<!--          </div>-->
           <div class="flex flex-col gap-2 self-end text-base font-bold">
             <h4>Итоговая сумма: {{ formattedPriceValue(calcTotalPrice) }}</h4>
           </div>
@@ -138,7 +138,8 @@ export default {
     },
   },
   methods: {
-    ...mapActions('cart', ['removeFromCart', 'setCartModalOpen', 'checkout']),
+    ...mapActions('cart', ['removeFromCart', 'setCartModalOpen', 'checkout', 'updateCart']),
+    ...mapGetters('auth', ['getIsAuth']),
     clearTel() {
       if(this.tel === '+') {
         this.tel = '+7 '
@@ -154,6 +155,11 @@ export default {
         })
       }
     },
+  },
+  mounted() {
+    if(this.getIsAuth) {
+      this.updateCart()
+    }
   }
 }
 </script>

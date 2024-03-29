@@ -4,12 +4,12 @@
       <div class="flex items-center justify-between border-b border-dark pb-5">
         <h1 class="text-3xl font-medium">Мои заказы</h1>
         <button @click="logout" class="flex items-center gap-1 font-medium">
-          <div class="w-12 h-12">
+          <div class="h-8 w-8 sm:h-12 sm:w-12 ">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor" class="w-full h-full">
               <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 9V5.25A2.25 2.25 0 0 1 10.5 3h6a2.25 2.25 0 0 1 2.25 2.25v13.5A2.25 2.25 0 0 1 16.5 21h-6a2.25 2.25 0 0 1-2.25-2.25V15m-3 0-3-3m0 0 3-3m-3 3H15" />
             </svg>
           </div>
-          <span>Выйти</span>
+          <span class="text-sm sm:text-base">Выйти</span>
         </button>
       </div>
       <div class="flex flex-col gap-7 mt-8">

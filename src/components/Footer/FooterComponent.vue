@@ -1,11 +1,32 @@
 <template>
   <footer>
     <div class="container py-12 sm:py-24 flex flex-col gap-12">
-      <div class="flex flex-wrap justify-between gap-4">
+      <div class="flex flex-wrap justify-between gap-4 sm:gap-12">
         <MenuEl :menuEls="menuEls"/>
+        <div class="flex items-center gap-7 mt-2 sm:mt-0 w-full flex-wrap sm:flex-nowrap lg:w-1/2">
+          <div class="flex flex-col gap-4">
+            <div class="flex flex-col justify-end gap-5 toggle-input">
+              <div class="h-4 toggle-input__placeholder">
+                <span class="text-green-500" v-if="this.message">{{ this.message }}</span>
+                <span class="text-gray-400 font-medium text-sm sm:text-lg"
+                      :class="getSubscribeErrors.email ? 'text-red-500' : ''"
+                      v-else-if="inputFocused && email.length === 0 || getSubscribeErrors.email">
+                    {{ getSubscribeErrors.email ? getSubscribeErrors.email[0] : '' }}</span>
+              </div>
+              <div class="flex flex-col gap-2 w-full">
+                <input v-model="email" class="transition-all duration-300 bg-transparent font-medium placeholder:text-[#C9C9C9FF] focus:placeholder:text-transparent" @focus="toggle" @blur="toggle" placeholder="example@example.com" type="text">
+                <div style="height: 3px" class="w-full bg-brown"></div>
+              </div>
+            </div>
+            <span class="text-sm">Подписываясь на рассылку, вы соглашаетесь с условиями политики конфиденциальности </span>
+          </div>
+          <div>
+            <button @click="subscribeAndShowMessage" class="px-12 border-2 border-dark py-4 text-sm sm:text-base font-medium">Подписаться</button>
+          </div>
+        </div>
       </div>
       <div>
-        <div class="flex flex-wrap-reverse justify-between items-center gap-4">
+        <div class="flex flex-wrap-reverse justify-start items-center gap-8">
           <div class="flex flex-col gap-7 w-full text-center">
 <!--            <div class="flex items-center gap-4">-->
 <!--              <div class="h-12">-->
@@ -16,28 +37,6 @@
 <!--              </div>-->
 <!--            </div>-->
             <span class="text-sm sm:text-base mt-6">© 2024 Oxygen | Все права защищены</span>
-          </div>
-          <div class="flex flex-col gap-7 md:w-full 2xl:w-auto">
-<!--            <h3 class="font-bold text-sm sm:text-base">Узнавайте о новостях первыми</h3>-->
-            <div class="flex flex-col gap-4">
-              <div class="flex flex-col justify-end gap-5 toggle-input">
-                <div class="h-4 toggle-input__placeholder">
-                  <span class="text-green-500" v-if="this.message">{{ this.message }}</span>
-                  <span class="text-gray-400 font-medium text-sm sm:text-lg"
-                        :class="getSubscribeErrors.email ? 'text-red-500' : ''"
-                        v-else-if="inputFocused && email.length === 0 || getSubscribeErrors.email">
-                    {{ getSubscribeErrors.email ? getSubscribeErrors.email[0] : '' }}</span>
-                </div>
-                <div class="flex flex-col gap-2 w-full">
-                  <input v-model="email" class="transition-all duration-300 bg-transparent font-medium placeholder:text-[#C9C9C9FF] focus:placeholder:text-transparent" @focus="toggle" @blur="toggle" placeholder="example@example.com" type="text">
-                  <div style="height: 3px" class="w-full bg-brown"></div>
-                </div>
-              </div>
-              <span class="text-sm">Подписываясь на рассылку, вы соглашаетесь с условиями политики конфиденциальности </span>
-            </div>
-          </div>
-          <div class="w-full md:w-1/4">
-            <button @click="subscribeAndShowMessage" class="w-full h-full border-2 border-dark py-4 sm:py-6 text-sm sm:text-lg font-medium">Подписаться</button>
           </div>
         </div>
       </div>

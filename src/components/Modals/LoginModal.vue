@@ -10,7 +10,7 @@
         <ErrorMessage :error="getErrors.error"/>
       </div>
     </TopErrorMessages>
-    <div class="cart-modal__content modal__content h-full sm:h-auto bg-bg z-40 rounded">
+    <div class="cart-modal__content modal__content h-full sm:h-auto bg-white z-40 rounded">
       <div class="absolute top-2 right-2 p-5 z-40 hidden sm:flex">
         <XMarkIcon class="cursor-pointer h-9 w-9 text-white stroke-1 close-icon"></XMarkIcon>
       </div>
@@ -56,7 +56,7 @@ export default {
     ...mapGetters('auth', ['getErrors']),
   },
   methods: {
-    ...mapActions('auth', ['login', 'setLoginModalOpen']),
+    ...mapActions('auth', ['login', 'setLoginModalOpen', 'isAuthCheck']),
     ...mapMutations('auth', ['setError']),
 
     closeModal(event) {
@@ -73,7 +73,15 @@ export default {
 
     }
 
-  }
+  },
+
+  mounted() {
+
+    const token = localStorage.getItem('token')
+
+    token ? this.isAuthCheck() : ''
+
+  },
 
 }
 </script>

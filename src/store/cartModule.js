@@ -1,6 +1,6 @@
 import axios from "axios";
 import store from "@/store/index";
-import router from "@/router/router";
+// import router from "@/router/router";
 // import router from "@/router/router";
 
 export const cartModule = {
@@ -9,7 +9,8 @@ export const cartModule = {
         return {
             cart: JSON.parse(localStorage.getItem('cart')) || [],
             cartModalOpen: false,
-            errors: {}
+            errors: {},
+            backendApiDomain: 'https://backend.oxygen-an.ru/api/v1/',
         }
     },
 
@@ -39,7 +40,7 @@ export const cartModule = {
             state.cart = JSON.parse(localStorage.getItem('cart'))
         },
 
-        updateCartItem(state, { index, item }) {
+        updateCartItem(state, {index, item}) {
             state.cart[index] = item;
             localStorage.setItem('cart', JSON.stringify(state.cart));
         },
@@ -85,11 +86,11 @@ export const cartModule = {
 
             let data = JSON.parse(localStorage.getItem('cart'))
 
-            data = data.map(item => ({ product_id: item.id, count: item.count }))
+            data = data.map(item => ({product_id: item.id, count: item.count}))
 
             const isAuth = localStorage.getItem('token')
 
-            if(isAuth) {
+            if (isAuth) {
 
                 return await axios.patch(`https://backend.oxygen-an.ru/api/v1/cart/update`, {
                     products: data
@@ -105,7 +106,7 @@ export const cartModule = {
 
         setCartModalOpen(state, objectValue) {
 
-            if(!state.cartModalOpen) {
+            if (!state.cartModalOpen) {
 
                 document.body.style.paddingRight = `${window.innerWidth - document.documentElement.clientWidth}px`;
 
@@ -137,13 +138,13 @@ export const cartModule = {
 
             }
 
-            if(objectValue.condition) {
+            if (objectValue.condition) {
 
                 setTimeout(() => {
 
                     const modalMenu = document.querySelector('.modal')
 
-                    if(modalMenu) modalMenu.classList.toggle('modal_show')
+                    if (modalMenu) modalMenu.classList.toggle('modal_show')
 
                 }, 1)
 
@@ -160,7 +161,7 @@ export const cartModule = {
 
                 const modalMenu = document.querySelector('.modal')
 
-                if(modalMenu) modalMenu.classList.toggle('modal_show')
+                if (modalMenu) modalMenu.classList.toggle('modal_show')
 
             }
 
@@ -172,7 +173,7 @@ export const cartModule = {
 
         async addToCart(context, item) {
 
-            if(!context.state.cart.some(obj => obj.id === item.id)) {
+            if (!context.state.cart.some(obj => obj.id === item.id)) {
 
                 context.commit('addToCart', item);
 
@@ -182,13 +183,13 @@ export const cartModule = {
 
                 const index = context.state.cart.findIndex(obj => obj.id === item.id);
 
-                context.commit('updateCartItem', { index, item });
+                context.commit('updateCartItem', {index, item});
 
             }
 
-            await context.dispatch('auth/isAuthCheck', '', { root: true })
+            await context.dispatch('auth/isAuthCheck', '', {root: true})
 
-            if(store.getters["auth/getIsAuth"]) {
+            if (store.getters["auth/getIsAuth"]) {
 
                 return await axios.post(store.getters["auth/getBackendApiDomain"] + 'cart/products', {
                     product_id: item.id,
@@ -201,11 +202,11 @@ export const cartModule = {
 
         async removeFromCart(context, object) {
 
-            await context.dispatch('auth/isAuthCheck', '', { root: true })
+            await context.dispatch('auth/isAuthCheck', '', {root: true})
 
             await context.commit('removeFromCart', object.index)
 
-            if(await store.getters["auth/getIsAuth"]) {
+            if (await store.getters["auth/getIsAuth"]) {
 
                 return await axios.delete(store.getters["auth/getBackendApiDomain"] + `cart/products/${object.id}`, {
 
@@ -241,7 +242,28 @@ export const cartModule = {
             context.commit('updateCartItems');
         },
 
+        async updateCart(context) {
 
+            const token = JSON.parse(localStorage.getItem('token'))
+            let data = JSON.parse(localStorage.getItem('cart'))
+
+            if (data && data.length > 0 && token) {
+
+                data = data.map(item => ({product_id: item.id, count: item.count}))
+
+                // Синхронизация корзины
+                await axios.patch(context.state.backendApiDomain + `cart/update`, {
+                    products: data
+                }, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                })
+
+                // Обратная синхронизация корзины
+
+            }
+        },
 
         // async cartUpdate({state}) {
         //
@@ -275,9 +297,11 @@ export const cartModule = {
 
             try {
 
-                await commit.dispatch('auth/isAuthCheck', '', { root: true })
+                await commit.dispatch('auth/isAuthCheck', '', {root: true})
 
                 const products = JSON.parse(localStorage.getItem('cart'))
+
+                const token = JSON.parse(localStorage.getItem('token'))
 
                 const dataProducts = [];
 
@@ -292,12 +316,18 @@ export const cartModule = {
 
                 let response = ''
 
-                if(store.getters["auth/getIsAuth"]) {
+                if (store.getters["auth/getIsAuth"]) {
 
                     response = await axios.post(url + 'auth/checkout', {
                         ...data,
                         products: dataProducts
+                    }, {
+                        headers: {
+                            'Authorization': `Bearer ${token}`
+                        }
                     })
+
+                    commit.dispatch('cart/updateCartItems', '', {root: true})
 
                 } else {
 
@@ -312,17 +342,17 @@ export const cartModule = {
 
                 localStorage.removeItem('cart')
 
-                commit.dispatch('cart/updateCartItems', '', { root: true })
+                // response = await axios.delete(url + 'cart/clear')
 
                 commit.state.cartModalOpen = false
 
-                await router.push('/profile')
+                window.location.href="https://qr.nspk.ru/AS1A007V2A1EUQJM9ABAKQV1T30L6EUN?type=01&bank=100000000284&crc=F04F?returnUrl=" + encodeURIComponent(window.location.href)
 
             } catch (exception) {
 
-                if(exception.response) {
+                if (exception.response) {
 
-                    commit.dispatch('cart/setErrors', exception.response.data.errors, { root: true })
+                    commit.dispatch('cart/setErrors', exception.response.data.errors, {root: true})
 
                 }
 
@@ -334,11 +364,11 @@ export const cartModule = {
 
             try {
 
-                await commit.dispatch('auth/isAuthCheck', '', { root: true })
+                await commit.dispatch('auth/isAuthCheck', '', {root: true})
 
-                if(store.getters["auth/getIsAuth"]) {
+                if (store.getters["auth/getIsAuth"]) {
 
-                    const url = store.getters["auth/getBackendApiDomain"] +`cart/${cartId}/status/canceling`;
+                    const url = store.getters["auth/getBackendApiDomain"] + `cart/${cartId}/status/cancelling`;
 
                     const token = localStorage.getItem('token')
 

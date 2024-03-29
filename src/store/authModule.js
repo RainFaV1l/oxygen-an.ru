@@ -304,7 +304,7 @@ export const authModule = {
 
             try {
 
-                const token = localStorage.getItem('token')
+                const token = JSON.parse(localStorage.getItem('token'))
 
                 const response = await axios.post(context.state.backendGetUserUrl, null, {
 
@@ -330,6 +330,9 @@ export const authModule = {
                                 'Authorization': `Bearer ${token}`
                             }
                         })
+
+                        // Обратная синхронизация корзины
+                        
 
                     }
 
@@ -393,6 +396,8 @@ export const authModule = {
             try {
 
                 context.state.isModalMenuOpen = false
+
+                context.state.isAuth = false
 
                 const token = JSON.parse(localStorage.getItem('token'))
 

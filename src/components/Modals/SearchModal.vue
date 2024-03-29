@@ -1,6 +1,6 @@
 <template>
   <div class="absolute search-modal h-full w-full z-10" @click="closeSearchModal">
-    <div class="search-modal__content fixed top-0 left-0 w-full flex flex-col justify-center items-center p-6 sm:p-12 bg-yellow z-20 gap-7">
+    <div class="search-modal__content fixed top-0 left-0 w-full flex flex-col justify-center items-center p-6 sm:p-12 z-20 gap-7" style="background-color: rgb(227, 217, 210);">
       <div class="flex justify-center sm:justify-start items-center w-full xl:w-1/2 2xl:w-1/3 gap-7">
         <div class="relative w-full h-full">
           <div class="absolute top-1/2 left-6 -translate-y-1/2">

@@ -10,10 +10,16 @@ export default [
     //     'title': 'Блог бренда',
     // },
     {
-        'title': 'Оплата и доставка',
+        'title': 'Оплата',
+        'link': '/assets/files/payment.pdf',
     },
     {
-        'title': 'Условия возврата/обмена',
+        'title': 'Доставка',
+        'link': '/assets/files/delivery.pdf',
+    },
+    {
+        'title': 'Оферта',
+        'link': '/assets/files/offer.pdf',
     },
     // {
     //     'title': '-',

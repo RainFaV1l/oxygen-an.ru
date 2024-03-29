@@ -61,9 +61,45 @@ export default {
     ...mapGetters('auth', ['loginModalOpen', 'getIsModalMenuOpen']),
   },
 
+  created() {
+
+    const urlParams = new URLSearchParams(window.location.search);
+
+    const returnUrl = urlParams.get('returnUrl');
+
+    if (returnUrl) {
+
+      // Перенаправляем пользователя на страницу, указанную в returnUrl
+      this.$router.push(returnUrl);
+
+    } else {
+
+      // Если returnUrl не указан, перенаправляем пользователя на домашнюю страницу или другую страницу по умолчанию
+      this.$router.push('/');
+
+    }
+
+  },
+
+  mounted() {
+
+    const isAuth = JSON.parse(localStorage.getItem('token'))
+
+    if(isAuth) {
+
+      this.setIsAuth(true)
+
+      return
+
+    }
+
+    this.setIsAuth(false)
+
+  },
+
   methods: {
 
-    ...mapMutations('auth', ['setIsModalMenuOpen']),
+    ...mapMutations('auth', ['setIsModalMenuOpen', 'setIsAuth']),
 
     toggleModal() {
 
